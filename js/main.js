@@ -3,6 +3,9 @@ let currentLang = localStorage.getItem('preferred_language') ||
                  navigator.language.substring(0, 2) || 
                  'ar'; // Default language
 
+// Device detection for mobile optimizations
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 function detectLanguage() {
     const browserLang = navigator.language.split('-')[0];
     return ['ar', 'fr', 'en'].includes(browserLang) ? browserLang : 'ar';
@@ -51,24 +54,103 @@ function setLanguage(lang) {
     }
 }
 
-// Scroll animation function
+// Scroll animation function with performance optimizations
 function handleScrollAnimation() {
+    // Only use animations on non-mobile devices or if the user hasn't disabled animations
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (prefersReducedMotion || (isMobile && !sessionStorage.getItem('allow_animations'))) {
+        // Skip animations for better performance on mobile or if user prefers reduced motion
+        return;
+    }
+    
     const elements = document.querySelectorAll('.card, .hero-section h1, .hero-section p, section h2, .contact-section .card');
     elements.forEach(element => {
         element.classList.add('fade-in');
     });
 
+    // Use more efficient intersection observer with lower update frequency for mobile
+    const observerOptions = {
+        threshold: isMobile ? 0.1 : 0.2,
+        rootMargin: '0px',
+    };
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                // Unobserve after animation to save resources
+                observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, observerOptions);
 
     elements.forEach(element => {
         observer.observe(element);
     });
+}
+
+// Lazy loading for images with native support check
+function setupLazyLoading() {
+    // Check if browser supports native lazy loading
+    if ('loading' in HTMLImageElement.prototype) {
+        // Use native lazy loading
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            img.src = img.dataset.src;
+            img.setAttribute('loading', 'lazy');
+            img.removeAttribute('data-src');
+        });
+    } else {
+        // Fallback to Intersection Observer API
+        const lazyImages = [].slice.call(document.querySelectorAll("img[data-src]"));
+        
+        if ("IntersectionObserver" in window) {
+            let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        let lazyImage = entry.target;
+                        lazyImage.src = lazyImage.dataset.src;
+                        lazyImage.removeAttribute('data-src');
+                        lazyImageObserver.unobserve(lazyImage);
+                    }
+                });
+            }, { rootMargin: "0px 0px 300px 0px" }); // Load images 300px before they appear
+
+            lazyImages.forEach(function(lazyImage) {
+                lazyImageObserver.observe(lazyImage);
+            });
+        }
+    }
+}
+
+// Mobile-specific optimizations
+function setupMobileOptimizations() {
+    if (isMobile) {
+        // Collapsible navbar should close when a link is clicked
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        const navbarCollapse = document.querySelector('.navbar-collapse');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navbarCollapse.classList.contains('show')) {
+                    navbarToggler.click();
+                }
+            });
+        });
+        
+        // Add touch feedback for buttons
+        const buttons = document.querySelectorAll('.btn, .card, .nav-link');
+        buttons.forEach(button => {
+            button.addEventListener('touchstart', function() {
+                this.classList.add('active-touch');
+            }, { passive: true });
+            
+            button.addEventListener('touchend', function() {
+                this.classList.remove('active-touch');
+            }, { passive: true });
+        });
+    }
 }
 
 // Initialize language based on browser settings
@@ -88,6 +170,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize scroll animations
     handleScrollAnimation();
+    
+    // Setup lazy loading
+    setupLazyLoading();
+    
+    // Setup mobile optimizations
+    setupMobileOptimizations();
 
     // Handle contact form submission
     const contactForm = document.getElementById('contactForm');

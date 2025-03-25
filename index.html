@@ -2,31 +2,143 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#4B7F52">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="description" content="AB-Promo - الترويج والتطوير للمنتجات الصيدلانية والعلاج بالأعشاب">
     <title>AB-Promo</title>
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <!-- Add Apple touch icon -->
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            .navbar-brand img {
+                max-width: 120px;
+            }
+            
+            .hero-section {
+                padding-top: 80px;
+            }
+            
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .hero-section .lead {
+                font-size: 1.1rem;
+            }
+            
+            .hero-image {
+                margin-top: 2rem;
+            }
+            
+            .card {
+                margin-bottom: 1rem;
+            }
+            
+            .footer {
+                text-align: center;
+            }
+            
+            .footer-brand {
+                margin-bottom: 1.5rem;
+            }
+            
+            .footer-links, .footer-contact {
+                margin-bottom: 2rem;
+            }
+            
+            .footer-social {
+                justify-content: center;
+                margin-top: 1rem;
+            }
+            
+            .footer-links-bottom {
+                margin-top: 1rem;
+                text-align: center;
+            }
+            
+            .language-switcher {
+                top: 0.5rem;
+                right: 0.5rem;
+                z-index: 1050;
+            }
+            
+            .lang-dropdown {
+                font-size: 0.9rem;
+            }
+
+            .nav-link {
+                padding: 1rem;
+            }
+
+            .social-link {
+                padding: 12px;
+                margin: 5px;
+            }
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bs-primary);
+            color: white;
+            text-align: center;
+            line-height: 40px;
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-top:hover {
+            background: var(--bs-primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .back-to-top.show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <!-- Language Switcher -->
     <div class="language-switcher position-fixed">
         <div class="lang-dropdown">
-            <button class="lang-current">
+            <button class="lang-current" aria-label="تغيير اللغة">
                 <span class="lang-flag">🌐</span>
                 <span class="lang-text" data-translate="current_lang">العربية</span>
                 <span class="lang-arrow">▼</span>
             </button>
             <div class="lang-options">
-                <button class="lang-option lang-switch" data-lang="ar">
+                <button class="lang-option lang-switch" data-lang="ar" aria-label="اللغة العربية">
                     <span class="lang-flag">🇩🇿</span>
                     <span class="lang-text">العربية</span>
                 </button>
-                <button class="lang-option lang-switch" data-lang="fr">
+                <button class="lang-option lang-switch" data-lang="fr" aria-label="اللغة الفرنسية">
                     <span class="lang-flag">🇫🇷</span>
                     <span class="lang-text">Français</span>
                 </button>
-                <button class="lang-option lang-switch" data-lang="en">
+                <button class="lang-option lang-switch" data-lang="en" aria-label="اللغة الإنجليزية">
                     <span class="lang-flag">🇬🇧</span>
                     <span class="lang-text">English</span>
                 </button>
@@ -37,10 +149,10 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="images/logo.png" alt="AB-Promo Logo">
+            <a class="navbar-brand" href="index.html" aria-label="AB-Promo الصفحة الرئيسية">
+                <img src="images/logo.png" alt="AB-Promo Logo" width="150" height="90">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="تبديل التنقل">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -58,6 +170,15 @@
                         <a class="nav-link" href="contact.html" data-translate="contact">اتصل بنا</a>
                     </li>
                 </ul>
+                <!-- Mobile Contact Button -->
+                <div class="d-lg-none mt-3">
+                    <a href="tel:+22222222222" class="btn btn-sm btn-outline-primary me-2">
+                        <i class="fas fa-phone-alt me-1"></i> اتصل الآن
+                    </a>
+                    <a href="https://wa.me/22222222222" class="btn btn-sm btn-success">
+                        <i class="fab fa-whatsapp me-1"></i> واتساب
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -74,7 +195,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="hero-image">
-                        <img src="images/hero.jpg" alt="AB-Promo Hero" class="img-fluid floating">
+                        <img src="images/hero.jpg" alt="AB-Promo Hero" class="img-fluid floating" data-src="images/hero.jpg">
                     </div>
                 </div>
             </div>
@@ -134,7 +255,7 @@
             <div class="row g-4">
                 <div class="col-lg-4">
                     <div class="footer-brand">
-                        <img src="images/logo.png" alt="AB-Promo Logo" class="footer-logo">
+                        <img src="images/logo.png" alt="AB-Promo Logo" class="footer-logo" data-src="images/logo.png">
                     </div>
                     <p class="footer-about" data-translate="footer_about">نحن شركة رائدة في مجال الترويج للمنتجات الصيدلانية والعلاج بالأعشاب، نقدم حلولاً مبتكرة ونتائج فعالة.</p>
                 </div>
@@ -188,8 +309,41 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Back to top button with improved accessibility -->
+    <button class="back-to-top" id="backToTop" aria-label="العودة إلى الأعلى">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Loading Bootstrap JS with defer to improve page load performance -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <!-- Load translations first -->
     <script src="translations/translations.js"></script>
-    <script src="js/main.js"></script>
+    <!-- Then load main.js -->
+    <script src="js/main.js" defer></script>
+    
+    <script>
+        // Back to top button functionality
+        function onscroll() {
+            const backToTopButton = document.querySelector('.back-to-top');
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+        }
+
+        document.querySelector('.back-to-top').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Initialize scroll handler
+        onscroll();
+    </script>
 </body>
 </html>

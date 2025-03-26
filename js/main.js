@@ -180,20 +180,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle contact form submission
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        contactForm.addEventListener('submit', function(event) {
+            // لا نمنع السلوك الافتراضي لأننا نريد أن يتم إرسال النموذج إلى Formspree
             
-            // Get form values
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
+            // إضافة مؤشر تحميل أثناء الإرسال
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+            submitButton.disabled = true;
             
-            // Show thank you message in current language
-            alert(translations[currentLang].thank_you);
-            
-            // Reset form
-            contactForm.reset();
+            // لا نحتاج إلى مزيد من الإجراءات هنا لأن Formspree سيتولى الباقي
+            // وسيتم توجيه المستخدم إلى صفحة الشكر المحددة في النموذج
         });
     }
     
